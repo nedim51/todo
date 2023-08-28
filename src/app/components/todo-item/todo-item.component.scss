@@ -1,0 +1,13 @@
+$background-item-color: #ededed;
+
+:host {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 48px;
+    padding: 0 10px;
+    border-radius: 5px;
+    
+    background-color: $background-item-color;
+}
