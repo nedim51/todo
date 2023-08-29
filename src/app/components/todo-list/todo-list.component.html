@@ -1,23 +1,16 @@
 <div class="todo-header">
-    <h2>Todo List</h2>
+    <h2>{{ title }}</h2>
 </div>
 
 <ul class="todo-body">
-    <li class="todo-item">
-        <span>Buy a new gaming laptop</span>
-        <button>Delete</button>
+    <li *ngFor="let todo of todos; index as i">
+        <app-todo-item [todo]="todo" (todoOnDelete)="deleteTodo($event)"></app-todo-item>
     </li>
-    <li class="todo-item">
-        <span>Complete previous task</span>
-        <button>Delete</button>
-    </li>
-    <li class="todo-item">
-        <span>Create some Angular app</span>
-        <button>Delete</button>
-    </li>
+
+    <span class="todo-no-items" *ngIf="!todos.length">No records</span>
 </ul>
 
 <div class="todo-actions">
-    <input type="text" placeholder="Add your new todo">
-    <button type="button">Add task</button>
+    <input class="input" type="text" placeholder="Add your new todo" [(ngModel)]="todoValue"/>
+    <button class="button button--add" type="button" (click)="appendTodo(todoValue)" [disabled]="disabledSubmit">Add task</button>
 </div>
