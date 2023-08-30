@@ -3,14 +3,28 @@
 </div>
 
 <ul class="todo-body">
+    <ng-container *ngTemplateOutlet="isLoading === true ? todoLoading : todoItems"></ng-container>
+
+    <span class="todo-no-items" *ngIf="!isLoading && !todos.length">No records</span>
+</ul>
+
+<!-- <input class="input" placeholder="Add your new todo" [(ngModel)]="todoValue"/> -->
+<!-- <button class="button button--add" type="button" (click)="appendTodo(todoValue)" [disabled]="disabledSubmit">Add task</button> -->
+
+<div class="todo-actions">
+    <mat-form-field class="input">
+        <input type="text" matInput placeholder="Add your new todo" [(ngModel)]="todoValue">
+    </mat-form-field>
+
+    <app-button title="Add task" (click)="appendTodo(todoValue)"></app-button> 
+</div>
+
+<ng-template #todoItems>
     <li *ngFor="let todo of todos; index as i">
         <app-todo-item [todo]="todo" (todoOnDelete)="deleteTodo($event)"></app-todo-item>
     </li>
+</ng-template>
 
-    <span class="todo-no-items" *ngIf="!todos.length">No records</span>
-</ul>
-
-<div class="todo-actions">
-    <input class="input" type="text" placeholder="Add your new todo" [(ngModel)]="todoValue"/>
-    <button class="button button--add" type="button" (click)="appendTodo(todoValue)" [disabled]="disabledSubmit">Add task</button>
-</div>
+<ng-template #todoLoading>
+    <span class="spinner"></span>
+</ng-template>

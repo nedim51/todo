@@ -1,18 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ITodo, ITodos } from '../../interface/todo/todo-item.interface';
 import { TODOS } from './todo.data';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
-  styleUrls: ['./todo-list.component.scss']
+  styleUrls: ['./todo-list.component.scss'],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        subscriptSizing: 'dynamic'
+      }
+    }
+  ]
 })
-export class TodoListComponent {
+export class TodoListComponent implements OnInit {
 
   title: string = 'Todo List';
 
   todos: ITodos = TODOS;
   todoValue: string = '';
+
+  isLoading: boolean = false;
 
   get disabledSubmit(): boolean {
     return !this.todoValue.length
@@ -22,6 +33,14 @@ export class TodoListComponent {
     const arrayIdx = this.todos.length > 0 ? this.todos.map(n => n.id + 1) : [0];
     
     return Math.max(...arrayIdx);
+  }
+  
+  constructor() {
+    this.isLoading = true;
+  }
+
+  ngOnInit(): void {
+    setTimeout(() => this.isLoading = false, 1000);
   }
 
   deleteTodo(id: number): void {
