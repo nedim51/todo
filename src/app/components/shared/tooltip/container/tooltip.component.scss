@@ -1,0 +1,26 @@
+@import 'tooltip.variables.scss';
+
+:host {
+  position: fixed;
+  transform: translate(-50%);
+  margin-top: $tooltip-margin-top;
+  padding: $tooltip-padding;
+  border-radius: $tooltip-border-radius;
+  background-color: $background-color;
+  box-shadow: $box-shadow;
+  font-weight: $tooltip-font-weight;
+  font-size: $tooltip-font-size;
+  z-index: $z-index;
+
+  ::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: -4px;
+    left: calc(50% - 4px);
+    transform: rotate(45deg);
+    background-color: $background-color;
+    z-index: $z-index;
+  }
+}
