@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ITodo, ITodos } from '../../interface/todo/todo-item.interface';
-import { TODOS } from './todo.data';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { TodoService } from 'src/app/services/todo.service';
+import { Observable } from 'rxjs';
+import { NotificationService } from '../shared/notification/notification-message.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -12,7 +14,11 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
         subscriptSizing: 'dynamic'
-      }
+      } 
+    },
+    {
+      provide: TodoService,
+      useClass: TodoService,
     }
   ]
 })
@@ -20,45 +26,76 @@ export class TodoListComponent implements OnInit {
 
   title: string = 'Todo List';
 
-  todos: ITodos = TODOS;
-  todoValue: string = '';
-
+  todos$: Observable<ITodos>;
+  todoTextValue: string = '';
+  todoDescValue: string = '';
+  selectedItemId: number | undefined;
   isLoading: boolean = false;
 
-  get disabledSubmit(): boolean {
-    return !this.todoValue.length
-  }
+  todoItemTooltip: string = 'Показать описание'
+  
+  tooltipText: { status: string, message: string }[] = [
+    { status: 'active', message: 'Показать описание'}, 
+    { status: '!active', message: 'Скрыть описание'}
+  ]
 
-  get nextTodoId(): number {
-    const arrayIdx = this.todos.length > 0 ? this.todos.map(n => n.id + 1) : [0];
-    
-    return Math.max(...arrayIdx);
+  get canSubmit(): boolean {
+    return !this.todoTextValue.length
   }
   
-  constructor() {
+  constructor(private todoService: TodoService, private notification: NotificationService) {
     this.isLoading = true;
+    this.todos$ = this.todoService;
   }
 
   ngOnInit(): void {
     setTimeout(() => this.isLoading = false, 1000);
   }
 
-  deleteTodo(id: number): void {
-    this.todos = this.todos.filter(todo => todo.id != id);
+  public getTooltipTitle(itemId: number): string {
+    const status = this.selectedItemId === itemId ? '!active' : 'active';
+    const messages: string[] = this.tooltipText.filter((f) => f.status === status).map(m => m.message)
+    return Array.isArray(messages) && messages.length > 0 ? messages[0] : '';
   }
 
-  appendTodo(text: string): void {
-    const todoItem: ITodo = this.createTodoItem(text);
-    this.todos.push(todoItem);
-    this.todoValue = '';
+  public onSelectItem(todoId: number): void {
+    this.selectedItemId = this.selectedItemId != todoId ? todoId : undefined;
   }
 
-  createTodoItem(text: string): ITodo {
-    const nextId: number = this.nextTodoId;
+  public deleteTodo(todoId: number): void {
+    this.todoService.deleteTodo(todoId)
 
-    return  {
-      id: nextId,
-      text: text
-    }
+    this.clearValues()
+
+    this.showMessage('Запись удалена!');
+  }
+
+  public appendTodo(text: string, description: string): void {
+    this.todoService.appendTodoByParams(text, description);
+
+    this.clearValues();
+
+    this.showMessage('Запись добавлена!');
+  }
+
+  public onEditItem(todo: ITodo): void {
+    this.selectedItemId = undefined;
+
+    this.todoService.updateTodo(todo);
+
+    this.showMessage('Запись изменена!');
+  }
+  
+  public clearValues(): void {
+    this.todoTextValue = '';
+    this.todoDescValue = '';
+  }
+
+  public trackByFn(index: number, item: ITodo): unknown {
+    return `${index}__${item.id}`
+  }
+
+  private showMessage(message: string): void {
+    this.notification.info('Операция прошла успешно', message);
   }
 }

@@ -1,3 +1,14 @@
-<span>{{ todo.text }}</span>
-<!-- <button class="button button--delete" type="button" (click)="deleteTodo(todo.id)">Delete</button> -->
-<app-button title="Delete" (click)="deleteTodo(todo.id)"></app-button> 
+<ng-container *ngTemplateOutlet="readonly === false ? changeTitleTemplate : readonlyTitleTemplate; context: { $implicit: { todo } }"></ng-container>
+
+<app-button (click)="deleteTodo(todo.id)" tooltip="Удалить запись?">Delete</app-button> 
+
+<ng-template #readonlyTitleTemplate let-dataItem>
+    <span>{{ dataItem.todo.text }}</span>
+</ng-template>
+
+<ng-template #changeTitleTemplate let-dataItem>
+    <div class="change-title-container">
+        <input type="text" [value]="dataItem.todo.text" #titleInput>
+        <app-button (click)="onChangeTitleTodo(titleInput.value)">Save</app-button>
+    </div>
+</ng-template>
