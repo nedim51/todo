@@ -1,0 +1,22 @@
+<div *ngFor="let notification of notifications; trackBy: trackByFn" class="notification" @notificationAnimation>
+    <ng-container *ngTemplateOutlet="notificationTemplate; context:{ notification: notification }"></ng-container>
+</div>
+
+<ng-template #notificationTemplate let-notification="notification">
+    <div class="notification__header" [ngClass]="className(notification)">
+        <div class="header__content">
+            <span class="header__icon"></span>
+            <span class="header__title">{{ notification.title }}</span>
+        </div>
+        
+        <div class="header__actions">
+            <span class="header__close i-base i-close" (click)="close(notification)"></span>
+        </div>
+    </div>
+
+    <div class="notification__body">
+        <div class="body__content">
+            <span class="body__message">{{ notification.message }}</span>
+        </div>
+    </div>
+</ng-template>
