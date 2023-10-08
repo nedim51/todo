@@ -10,15 +10,19 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from './components/shared/shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
+import { TodoDescriptionComponent } from './components/todo-description/todo-description.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
     TodoItemComponent,
+    TodoDescriptionComponent,
   ],
   imports: [
+    // Angular
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     CommonModule,
     FormsModule,
@@ -28,7 +32,6 @@ import { MatInputModule } from '@angular/material/input';
 
     // Custom
     SharedModule,
-      BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

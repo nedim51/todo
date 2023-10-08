@@ -1,3 +1,2 @@
 <span>{{ todo.text }}</span>
-<!-- <button class="button button--delete" type="button" (click)="deleteTodo(todo.id)">Delete</button> -->
-<app-button title="Delete" (click)="deleteTodo(todo.id)"></app-button> 
+<app-button (click)="deleteTodo(todo.id)" tooltip="Удалить запись?">Delete</app-button> 
