@@ -1,59 +1,27 @@
-<!-- Header -->
 <div class="todo-header">
     <h2>{{ title }}</h2>
 </div>
 
-<!-- Body -->
 <ul class="todo-body">
     <ng-container *ngTemplateOutlet="isLoading === true ? todoLoading : todoItems"></ng-container>
-    
-    <span class="todo-no-items" *ngIf="!isLoading && !(todos$ | async)?.length">No records</span>
+
+    <span class="todo-no-items" *ngIf="!isLoading && !todos.length">No records</span>
 </ul>
 
-<!-- Actions -->
+<!-- <input class="input" placeholder="Add your new todo" [(ngModel)]="todoValue"/> -->
+<!-- <button class="button button--add" type="button" (click)="appendTodo(todoValue)" [disabled]="disabledSubmit">Add task</button> -->
+
 <div class="todo-actions">
-    <div class="todo-fields">
-        <mat-form-field class="input">
-            <input type="text" matInput placeholder="Add your new todo" [(ngModel)]="todoTextValue">
-        </mat-form-field>
+    <mat-form-field class="input">
+        <input type="text" matInput placeholder="Add your new todo" [(ngModel)]="todoValue">
+    </mat-form-field>
 
-        <hr style="opacity: 0;">
-
-        <mat-form-field class="input">
-            <textarea 
-                matInput
-                placeholder="Your todo description"
-                [(ngModel)]="todoDescValue"
-                cdkTextareaAutosize
-                #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="3"
-                cdkAutosizeMaxRows="5">
-            </textarea>
-        </mat-form-field>
-    </div>
-
-    <div class="todo-submit">
-        <app-button [disabled]="canSubmit" (click)="appendTodo(todoTextValue, todoDescValue)" tooltip="Добавить запись?">Add task</app-button> 
-    </div>
+    <app-button title="Add task" (click)="appendTodo(todoValue)"></app-button> 
 </div>
 
-<!-- Templates -->
-<!-- //(dblclick)="onEditItem(todo)" -->
 <ng-template #todoItems>
-    <li class="todo-item" *ngFor="let todo of todos$ | async; trackBy: trackByFn">
-        <app-todo-item 
-            [todo]="todo" 
-            (todoOnDelete)="deleteTodo($event)" 
-            (todoOnChange)="onEditItem($event)" 
-            (click)="onSelectItem(todo.id)" 
-            [tooltip]="getTooltipTitle(todo.id)"
-            [class.item--active]="todo.id === selectedItemId || selectedItemId == undefined">
-        </app-todo-item>
-
-        <app-todo-description 
-            [description]="todo.description" 
-            *ngIf="todo.id === selectedItemId">
-        </app-todo-description>
+    <li *ngFor="let todo of todos; index as i">
+        <app-todo-item [todo]="todo" (todoOnDelete)="deleteTodo($event)"></app-todo-item>
     </li>
 </ng-template>
 

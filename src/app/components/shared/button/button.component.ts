@@ -7,6 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
 
-  @Input('disabled')
-  disabled: boolean = false;
+  @Input({ required: true })
+  title: string = '';
 }
