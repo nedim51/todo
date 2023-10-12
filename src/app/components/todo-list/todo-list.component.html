@@ -7,7 +7,7 @@
 <ul class="todo-body">
     <ng-container *ngTemplateOutlet="isLoading === true ? todoLoading : todoItems"></ng-container>
     
-    <span class="todo-no-items" *ngIf="!isLoading && !todos.length">No records</span>
+    <span class="todo-no-items" *ngIf="!isLoading && !(todos$ | async)?.length">No records</span>
 </ul>
 
 <!-- Actions -->
@@ -38,12 +38,13 @@
 </div>
 
 <!-- Templates -->
+<!-- //(dblclick)="onEditItem(todo)" -->
 <ng-template #todoItems>
-    <li class="todo-item" *ngFor="let todo of todos; trackBy: trackByFn">
+    <li class="todo-item" *ngFor="let todo of todos$ | async; trackBy: trackByFn">
         <app-todo-item 
             [todo]="todo" 
             (todoOnDelete)="deleteTodo($event)" 
-            (dblclick)="onEditItem(todo)"
+            (todoOnChange)="onEditItem($event)" 
             (click)="onSelectItem(todo.id)" 
             [tooltip]="getTooltipTitle(todo.id)"
             [class.item--active]="todo.id === selectedItemId || selectedItemId == undefined">
