@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ITodo, ITodos } from '../../interface/todo/todo-item.interface';
+import { ITodo, ITodos } from '../../interfaces/todo/todo-item.interface';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { TodoService } from 'src/app/services/todo.service';
-import { Observable } from 'rxjs';
-import { NotificationService } from '../shared/notification/notification-message.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -15,10 +14,6 @@ import { NotificationService } from '../shared/notification/notification-message
       useValue: {
         subscriptSizing: 'dynamic'
       } 
-    },
-    {
-      provide: TodoService,
-      useClass: TodoService,
     }
   ]
 })
@@ -43,13 +38,19 @@ export class TodoListComponent implements OnInit {
     return !this.todoTextValue.length
   }
   
-  constructor(private todoService: TodoService, private notification: NotificationService) {
+  constructor(private todoService: TodoService) {
     this.isLoading = true;
-    this.todos$ = this.todoService;
+    this.todos$ = this.todoService.selectTodos();
   }
 
   ngOnInit(): void {
+    this.todoService.loadTodos()
+
     setTimeout(() => this.isLoading = false, 1000);
+  }
+
+  public filterChange(filterBy: string | number | null): void {
+    this.todos$ = this.todoService.selectTodos().pipe(map(i => i.filter(j => filterBy === 'all' || !(j.status == filterBy))))
   }
 
   public getTooltipTitle(itemId: number): string {
@@ -63,27 +64,21 @@ export class TodoListComponent implements OnInit {
   }
 
   public deleteTodo(todoId: number): void {
-    this.todoService.deleteTodo(todoId)
+    this.todoService.deleteTodoById(todoId)
 
-    this.clearValues()
-
-    this.showMessage('Запись удалена!');
+    this.clearValues();   
   }
 
   public appendTodo(text: string, description: string): void {
     this.todoService.appendTodoByParams(text, description);
 
     this.clearValues();
-
-    this.showMessage('Запись добавлена!');
   }
 
   public onEditItem(todo: ITodo): void {
     this.selectedItemId = undefined;
 
-    this.todoService.updateTodo(todo);
-
-    this.showMessage('Запись изменена!');
+    this.todoService.updateTodoDB(todo);
   }
   
   public clearValues(): void {
@@ -93,9 +88,5 @@ export class TodoListComponent implements OnInit {
 
   public trackByFn(index: number, item: ITodo): unknown {
     return `${index}__${item.id}`
-  }
-
-  private showMessage(message: string): void {
-    this.notification.info('Операция прошла успешно', message);
   }
 }
