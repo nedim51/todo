@@ -1,0 +1,28 @@
+<form [formGroup]="todoForm" (ngSubmit)="onCreateTodo()">
+    <div class="form-control">
+        <label for="_text">Title</label>
+        <input type="text" id="_text" formControlName="text">
+    </div>
+    
+    <br>
+    
+    <div class="form-control">
+        <label for="_description">Description</label>
+        <textarea type="text" id="_description" formControlName="description"></textarea>
+    </div>
+    
+    <br>
+    
+    <div class="form-control">
+        <label for="_status">Status</label>
+        <select id="_status" formControlName="status">
+            <option *ngFor="let option of todoStatusNames" value="{{ option.code }}">{{ option.name }}</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <div>
+        <button type="submit">Save</button>
+    </div>
+</form>

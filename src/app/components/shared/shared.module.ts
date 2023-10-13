@@ -7,6 +7,7 @@ import { TooltipComponent } from './tooltip/container/tooltip.component';
 
 import { NotificationContainerComponent } from './notification/notification-container/notification-container.component';
 import { NotificationMessageComponent } from './notification/notification-message/notification-message.component';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { NotificationMessageComponent } from './notification/notification-messag
     TooltipComponent,
 
     NotificationContainerComponent,
-    NotificationMessageComponent
+    NotificationMessageComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { NotificationMessageComponent } from './notification/notification-messag
   exports: [
     ButtonComponent,
     TooltipDirective,
-    NotificationContainerComponent
+    NotificationContainerComponent,
+    LoadingSpinnerComponent,
   ],
 })
 export class SharedModule { }

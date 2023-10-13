@@ -3,6 +3,10 @@
     <h2>{{ title }}</h2>
 </div>
 
+<!-- Filter -->
+
+<app-todo-filter (changeFilter)="filterChange($event)"></app-todo-filter>
+
 <!-- Body -->
 <ul class="todo-body">
     <ng-container *ngTemplateOutlet="isLoading === true ? todoLoading : todoItems"></ng-container>
@@ -58,5 +62,5 @@
 </ng-template>
 
 <ng-template #todoLoading>
-    <span class="spinner"></span>
+    <app-loading-spinner></app-loading-spinner>
 </ng-template>

@@ -1,0 +1,4 @@
+<label for="_status">Select status - </label>
+<select id="_status" (change)="onChangeFilter(select.value)" #select value="all">
+    <option *ngFor="let option of todoStatusNames" value="{{ option.code }}">{{ option.name }}</option>
+</select>
