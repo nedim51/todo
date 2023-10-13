@@ -15,6 +15,7 @@ import { NotificationService } from './components/shared/notification/notificati
 import { TodoCreateComponent } from './components/todo-create/todo-create.component';
 import { TodoFilterComponent } from './components/todo-filter/todo-filter.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TodoViewComponent } from './components/todo-view/todo-view.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     TodoDescriptionComponent,
     TodoCreateComponent,
     TodoFilterComponent,
+    TodoViewComponent,
   ],
   imports: [
     // Angular
