@@ -1,14 +1,31 @@
-<ng-container *ngTemplateOutlet="readonly === false ? changeTitleTemplate : readonlyTitleTemplate; context: { $implicit: { todo } }"></ng-container>
+<ng-container *ngTemplateOutlet="readonly === false ? changeTitleTemplate : readonlyTitleTemplate; context: { $implicit: todo }"></ng-container>
 
 <app-button (click)="deleteTodo(todo.id)" tooltip="Удалить запись?">Delete</app-button> 
 
 <ng-template #readonlyTitleTemplate let-dataItem>
-    <span>{{ dataItem.todo.text }}</span>
+    <div class="todo-item-body">
+        <input 
+            type="checkbox" 
+            [checked]="dataItem.status" 
+            (click)="$event.stopPropagation()"
+            (change)="onTodoStatusChange(dataItem.status)">
+
+        <span 
+            [ngClass]="!dataItem.status ? 'status--in-progress' : 'status--completed'" 
+            (dblclick)="onChangeTitle()" 
+            (click)="$event.stopPropagation()">
+            {{ dataItem.text }}
+        </span>
+    </div>
 </ng-template>
 
 <ng-template #changeTitleTemplate let-dataItem>
     <div class="change-title-container">
-        <input type="text" [value]="dataItem.todo.text" #titleInput>
-        <app-button (click)="onChangeTitleTodo(titleInput.value)">Save</app-button>
+        <input 
+            type="text" 
+            [value]="dataItem.text" 
+            #titleInput>
+
+        <app-button (click)="$event.stopPropagation(); onChangeTitleTodo(titleInput.value)">Save</app-button>
     </div>
 </ng-template>

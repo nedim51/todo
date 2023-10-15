@@ -1,0 +1,12 @@
+:host {
+    padding: 10px;
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+
+    & > label {
+        margin-bottom: 8px;
+    }
+}

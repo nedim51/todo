@@ -1,0 +1,24 @@
+@import 'color-variables.scss';
+
+:host {
+    margin: auto;
+    
+    display: inline-block;
+    vertical-align: -0.125em;
+    color: $primary-color;
+    border: 0.25em solid currentcolor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    
+    width: .75rem;
+    height: .75rem;
+
+    -webkit-animation: 1.5s linear infinite spinner-border;
+    animation: 1.5s linear infinite spinner-border;
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}

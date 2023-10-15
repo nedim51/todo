@@ -6,12 +6,15 @@ import { AppComponent } from './app.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './components/shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { TodoDescriptionComponent } from './components/todo-description/todo-description.component';
 import { NotificationService } from './components/shared/notification/notification-message.service';
+import { TodoCreateComponent } from './components/todo-create/todo-create.component';
+import { TodoFilterComponent } from './components/todo-filter/todo-filter.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,8 @@ import { NotificationService } from './components/shared/notification/notificati
     TodoListComponent,
     TodoItemComponent,
     TodoDescriptionComponent,
+    TodoCreateComponent,
+    TodoFilterComponent,
   ],
   imports: [
     // Angular
@@ -27,6 +32,8 @@ import { NotificationService } from './components/shared/notification/notificati
     AppRoutingModule,
     CommonModule,
     FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
 
     // Angular Material
     MatInputModule,
