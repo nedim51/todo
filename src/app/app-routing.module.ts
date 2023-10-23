@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { TodoViewComponent } from './components/todo-view/todo-view.component';
+import { canActivateDetailsRoute } from './guards/can-activate-details.guard';
 
 const routes: Routes = [
   {
@@ -14,8 +15,9 @@ const routes: Routes = [
     component: TodoListComponent,
     children: [
       {
-        path: ':todo-id',
+        path: ':id',
         component: TodoViewComponent,
+        canActivate: [canActivateDetailsRoute]
       }
     ]
   },

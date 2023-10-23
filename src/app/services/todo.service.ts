@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ITodo, ITodos } from "../interfaces/todo/todo-item.interface";
-import { BehaviorSubject, Observable, Subject, takeUntil } from "rxjs";
+import { BehaviorSubject, Observable, Subject, iif, map, of, switchMap, takeUntil } from "rxjs";
 import { TodoStatusEnum } from "../enums/todo-status.enum";
 import { TodoApiService } from "./todo-api.service";
 import { NotificationService } from "../components/shared/notification/notification-message.service";
@@ -25,6 +25,16 @@ export class TodoService extends BehaviorSubject<ITodos> implements OnDestroy {
       error: (error) => {},
       complete: () => {},
     })
+  }
+
+  public loadTodosAsync(): Observable<ITodos> {
+    return super.asObservable().pipe(switchMap((todos) =>
+      iif(
+        () => Array.isArray(todos) && todos.length > 0,
+        of(todos),
+        this.todoApi.getTodos()
+      )
+    ))
   }
 
   // Удалить запись из БД
@@ -115,15 +125,20 @@ export class TodoService extends BehaviorSubject<ITodos> implements OnDestroy {
     super.next(newTodoList);
   }
 
-
-  
   /**
    * Selectors
   */
  
- // Подписаться на список записей
- public selectTodos(): Observable<ITodos> {
+  // Подписаться на список записей
+  public selectTodos(): Observable<ITodos> {
    return super.asObservable();
+  }
+
+  // Подписаться на список записей
+  public selectTodoById(id: number): Observable<ITodo | undefined> {
+   return super.asObservable().pipe(
+    map(i => i.find(j => j.id === id))
+   );
   }
   
   /**

@@ -2,6 +2,7 @@
 
 <app-button (click)="deleteTodo(todo.id)" tooltip="Удалить запись?">Delete</app-button> 
 
+<!-- Template состояния для просмотра title -->
 <ng-template #readonlyTitleTemplate let-dataItem>
     <div class="todo-item-body">
         <input 
@@ -19,6 +20,8 @@
     </div>
 </ng-template>
 
+
+<!-- Template состояния для редактирования title -->
 <ng-template #changeTitleTemplate let-dataItem>
     <div class="change-title-container">
         <input 
