@@ -3,6 +3,7 @@ import { ITodo, ITodos } from '../../interfaces/todo/todo-item.interface';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { TodoService } from 'src/app/services/todo.service';
 import { Observable, map } from 'rxjs';
+import { ActivatedRoute, PRIMARY_OUTLET, Router, RunGuardsAndResolvers } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list',
@@ -38,9 +39,12 @@ export class TodoListComponent implements OnInit {
     return !this.todoTextValue.length
   }
   
-  constructor(private todoService: TodoService) {
+  selectedTodoId$: Observable<number> | undefined
+
+  constructor(private todoService: TodoService, private router: Router, private activatedRoute: ActivatedRoute) {
     this.isLoading = true;
     this.todos$ = this.todoService.selectTodos();
+    this.selectedTodoId$ = this.activatedRoute.firstChild?.params.pipe(map(params => params['id']))
   }
 
   ngOnInit(): void {
@@ -61,11 +65,12 @@ export class TodoListComponent implements OnInit {
 
   public onSelectItem(todoId: number): void {
     this.selectedItemId = this.selectedItemId != todoId ? todoId : undefined;
+    this.router.navigate(['todos', todoId])
   }
 
   public deleteTodo(todoId: number): void {
     this.todoService.deleteTodoById(todoId)
-
+    
     this.clearValues();   
   }
 
@@ -89,4 +94,5 @@ export class TodoListComponent implements OnInit {
   public trackByFn(index: number, item: ITodo): unknown {
     return `${index}__${item.id}`
   }
+
 }
